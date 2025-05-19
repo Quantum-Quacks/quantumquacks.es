@@ -1,90 +1,552 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- ... existing code ... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuantumQuacks - Estudio de Videojuegos</title>
+    <!-- Añadimos la hoja de estilos de Lenis -->
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.3/dist/lenis.css">
     <style>
+        :root {
+            --primary-color: #00e0b8;
+            --bg-color: #181c24;
+            --section-bg: #23283a;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            overflow-x: hidden;
+        }
+        
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: #181c24;
+            background: var(--bg-color);
             color: #fff;
+            margin: 0;
+        }
+        
+        section {
+            min-height: 100vh;
+            width: 100%;
+            padding: 80px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
+            position: relative;
         }
+        
+        .hero {
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #181c24 0%, #2a2f42 100%);
+        }
+        
+        .about {
+            background-color: var(--section-bg);
+        }
+        
+        .games {
+            background-color: var(--bg-color);
+        }
+        
+        .contact {
+            background-color: var(--section-bg);
+        }
+        
         .logo {
-            margin-top: 40px;
             width: 180px;
             height: auto;
+            margin-bottom: 30px;
+            transition: transform 0.5s ease;
         }
+        
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
         h1 {
-            margin-top: 24px;
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             letter-spacing: 1px;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: var(--primary-color);
+            bottom: -10px;
+            left: 20%;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.5s ease;
+        }
+        
+        section.in-view h2:after {
+            transform: scaleX(1);
+        }
+        
+        p {
+            max-width: 800px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .hero p {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        .game-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .game-card {
+            background: var(--section-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.6s ease, opacity 0.6s ease, box-shadow 0.3s ease;
+        }
+        
+        .game-card:hover {
+            box-shadow: 0 15px 40px rgba(0,224,184,0.3);
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .game-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .game-card-content {
+            padding: 20px;
+        }
+        
+        .game-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
         .newsletter {
             margin-top: 32px;
-            background: #23283a;
+            background: var(--section-bg);
             padding: 24px 32px;
             border-radius: 12px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.6s ease, opacity 0.6s ease;
         }
+        
         .newsletter input[type="email"] {
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
             border: none;
             margin-right: 8px;
             font-size: 1rem;
+            width: 100%;
+            margin-bottom: 15px;
         }
+        
         .newsletter button {
-            padding: 10px 18px;
+            padding: 12px 24px;
             border-radius: 6px;
             border: none;
-            background: #00e0b8;
-            color: #181c24;
+            background: var(--primary-color);
+            color: var(--bg-color);
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            margin-top: 12px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            width: 100%;
         }
+        
+        .newsletter button:hover {
+            transform: scale(1.05);
+            background-color: #00f5c8;
+        }
+        
         .newsletter label {
             margin-bottom: 12px;
             font-size: 1.1rem;
         }
-        @media (max-width: 600px) {
-            .newsletter {
-                padding: 18px 8px;
-            }
+        
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .parallax-bg div {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+        
+        .circle1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 10%;
+        }
+        
+        .circle2 {
+            width: 200px;
+            height: 200px;
+            bottom: 20%;
+            right: 15%;
+        }
+        
+        .circle3 {
+            width: 150px;
+            height: 150px;
+            bottom: 30%;
+            left: 20%;
+        }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            transition: background-color 0.3s ease, padding 0.3s ease;
+        }
+        
+        nav.scrolled {
+            background-color: rgba(35, 40, 58, 0.95);
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            transform: scaleX(1);
+        }
+        
+        section.in-view h1,
+        section.in-view .hero p,
+        section.in-view .game-card,
+        section.in-view .newsletter {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
             h1 {
-                font-size: 1.5rem;
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .game-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-card {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .nav-links {
+                gap: 15px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Logo del estudio -->
-    <img src="logo.jpg" alt="Logo QuantumQuacks" class="logo" />
+    <nav id="main-nav">
+        <div class="nav-links">
+            <a href="#hero" class="active">Inicio</a>
+            <a href="#games">Juegos</a>
+            <a href="#about">Nosotros</a>
+            <a href="#contact">Contacto</a>
+        </div>
+    </nav>
 
-    <h1>QuantumQuacks</h1>
-    <p>¡Bienvenido a nuestro estudio de videojuegos!</p>
+    <section id="hero" class="hero">
+        <div class="parallax-bg">
+            <div class="circle1" data-speed="0.1"></div>
+            <div class="circle2" data-speed="-0.2"></div>
+            <div class="circle3" data-speed="0.15"></div>
+        </div>
+        
+        <!-- Logo del estudio -->
+        <img src="logo.jpg" alt="Logo QuantumQuacks" class="logo" />
 
-    <div class="ml-embedded" data-form="mLQrzf"></div>
-<!-- MailerLite Universal --> 
-<script>
-    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-    ml('account', '1528903');
-</script>
-<!-- End MailerLite Universal -->
+        <h1>QuantumQuacks</h1>
+        <p>Creamos experiencias de juego únicas que desafían los límites de la realidad</p>
+        
+        <div class="scroll-indicator" id="scroll-down">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    </section>
+
+    <section id="games" class="games" style="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <img src="logo_4k_transparent.png" alt="Quantum Quacks" style="width: 320px; max-width: 90vw; margin-bottom: 32px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,224,184,0.10); background: #23283a;">
+            <h2 style="font-size: 2.8rem; color: var(--primary-color); margin-bottom: 18px; text-align: center;">Bouncing to the top with Quantum Quacks</h2>
+            <p style="font-size: 1.3rem; max-width: 700px; margin-bottom: 32px; text-align: center;">
+              Bouncing to the Top with Quantum Quacks es un desafiante juego de físicas donde tu objetivo es alcanzar la cima del nivel sin caer. Controlarás una pelota que rebota constantemente y solo puedes influir en su movimiento hacia la izquierda o la derecha, adaptándote al terreno para seguir subiendo. Los controles son fáciles de aprender, pero difíciles de dominar. Un solo error puede hacerte perder todo el progreso y obligarte a empezar desde abajo. A lo largo del recorrido, hay patitos de goma temáticos escondidos por el escenario. ¡Encuéntralos todos si puedes!
+            </p>
+            <a href="bouncingtothetop.html" style="padding: 16px 36px; background: var(--primary-color); color: var(--bg-color); border-radius: 8px; font-size: 1.2rem; font-weight: bold; text-decoration: none; box-shadow: 0 4px 24px rgba(0,224,184,0.15); transition: background 0.3s, transform 0.3s; margin-bottom: 24px; display: inline-block;">
+                Próximamente
+            </a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>Sobre Nosotros</h2>
+        <p>QuantumQuacks es un estudio independiente de desarrollo de videojuegos fundado en 2023. Nos especializamos en crear experiencias de juego innovadoras con mecánicas únicas e innovadoras.</p>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Mantente Informado</h2>
+        <p>Suscríbete a nuestro boletín para recibir las últimas noticias y actualizaciones sobre nuestros juegos</p>
+        
+        <div class="newsletter">
+            <div class="ml-embedded" data-form="mLQrzf"></div>
+        </div>
+    </section>
+
+    <!-- MailerLite Universal --> 
+    <script>
+        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+        ml('account', '1528903');
+    </script>
+    <!-- End MailerLite Universal -->
+
+    <!-- Añadimos el script de Lenis -->
+    <script src="https://unpkg.com/lenis@1.3.3/dist/lenis.min.js"></script>
+
+    <!-- Inicializamos Lenis para scroll suave -->
+    <script>
+        // Inicializar Lenis con configuración básica
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 1,
+            smoothTouch: false
+        });
+
+        // Referencias a elementos DOM
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const nav = document.getElementById('main-nav');
+        const scrollDown = document.getElementById('scroll-down');
+        const gameCards = document.querySelectorAll('.game-card');
+        const parallaxElements = document.querySelectorAll('[data-speed]');
+        
+        // Función para actualizar la navegación activa
+        function updateActiveNav() {
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop - 200 && window.scrollY < sectionTop + sectionHeight - 200) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Función para comprobar si una sección está en vista
+        function checkSectionsInView() {
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const isInView = (
+                    rect.top <= window.innerHeight * 0.7 &&
+                    rect.bottom >= window.innerHeight * 0.3
+                );
+                
+                if (isInView) {
+                    section.classList.add('in-view');
+                }
+            });
+            
+            // Efecto de parallax para los círculos de fondo
+            parallaxElements.forEach(el => {
+                const speed = el.getAttribute('data-speed');
+                const yPos = window.scrollY * speed;
+                el.style.transform = `translateY(${yPos}px)`;
+            });
+            
+            // Cambiar estilo de la navegación al hacer scroll
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }
+        
+        // Aplicar retrasos a las tarjetas de juegos
+        gameCards.forEach(card => {
+            const delay = card.getAttribute('data-delay');
+            if (delay) {
+                card.style.transitionDelay = `${delay}s`;
+            }
+        });
+        
+        // Evento de scroll para Lenis
+        lenis.on('scroll', (e) => {
+            updateActiveNav();
+            checkSectionsInView();
+        });
+        
+        // Iniciar animaciones cuando la página carga
+        window.addEventListener('load', () => {
+            document.querySelector('.hero').classList.add('in-view');
+            checkSectionsInView();
+        });
+        
+        // Scroll suave al hacer clic en los enlaces de navegación
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                lenis.scrollTo(targetSection, {
+                    offset: 0,
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+            });
+        });
+        
+        // Scroll hacia abajo al hacer clic en el indicador de desplazamiento
+        scrollDown.addEventListener('click', () => {
+            const aboutSection = document.getElementById('about');
+            
+            lenis.scrollTo(aboutSection, {
+                offset: 0,
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+        });
+        
+        // Usar requestAnimationFrame para actualizar continuamente el scroll
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        // Iniciar el bucle de animación
+        requestAnimationFrame(raf);
+    </script>
 </body>
 </html>
