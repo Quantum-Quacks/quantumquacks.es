@@ -157,7 +157,7 @@
 
         <h1>Política de Privacidad</h1>
         <div class="app-name">Kotomaji - Tu compañero para viajar a Japón</div>
-        <div class="last-updated">Última actualización: 1 de diciembre de 2025</div>
+        <div class="last-updated">Última actualización: 8 de junio de 2026</div>
 
         <h2>1. Introducción</h2>
         <p>
@@ -177,6 +177,9 @@
                 configuraciones se almacenan localmente en tu dispositivo y no se transmiten a nuestros servidores.</li>
             <li><strong>Sin seguimiento:</strong> No utilizamos herramientas de análisis ni rastreadores de terceros.
             </li>
+            <li><strong>Conexión a internet:</strong> El conversor de divisas descarga tipos de cambio actualizados
+                desde una fuente pública de datos de divisas. Solo se realiza una petición estándar de red; no se
+                envían datos personales ni identificadores.</li>
         </ul>
 
         <h2>3. Uso de la Información</h2>
@@ -188,7 +191,7 @@
         <h2>4. Almacenamiento de Datos</h2>
         <p>
             Los datos de tu progreso y preferencias se almacenan localmente en tu dispositivo utilizando las capacidades
-            de almacenamiento nativo de iOS. Estos datos incluyen:
+            de almacenamiento nativo de Android (Jetpack DataStore). Estos datos incluyen:
         </p>
         <ul>
             <li>Flashcards marcadas como favoritas o completadas</li>
@@ -201,21 +204,42 @@
 
         <h2>5. Permisos de la Aplicación</h2>
         <p>
-            Kotomaji no requiere permisos especiales del sistema operativo para funcionar. No solicitamos acceso a:
+            Para funcionar, Kotomaji solo solicita los siguientes permisos:
+        </p>
+        <ul>
+            <li><strong>Internet (<code>INTERNET</code>):</strong> necesario para descargar los tipos de cambio
+                actualizados del conversor de yenes y para procesar las compras a través de Google Play.</li>
+            <li><strong>Estado de la red (<code>ACCESS_NETWORK_STATE</code>):</strong> para comprobar si hay conexión
+                disponible antes de actualizar los tipos de cambio.</li>
+        </ul>
+        <p>
+            Kotomaji <strong>no</strong> solicita acceso a:
         </p>
         <ul>
             <li>Cámara o fotos</li>
             <li>Micrófono</li>
             <li>Contactos</li>
             <li>Ubicación</li>
-            <li>Notificaciones (opcional, solo si el usuario lo activa manualmente)</li>
+            <li>Almacenamiento del dispositivo o archivos personales</li>
         </ul>
 
         <h2>6. Servicios de Terceros</h2>
         <p>
-            Kotomaji no integra servicios de terceros como redes publicitarias, plataformas de análisis o servicios de
-            redes sociales. La app funciona de forma completamente autónoma sin conexiones externas.
+            Kotomaji <strong>no</strong> incluye publicidad, herramientas de análisis ni rastreadores de redes sociales.
+            La app utiliza únicamente dos servicios externos, y solo para las funciones indicadas:
         </p>
+        <ul>
+            <li><strong>Tipos de cambio:</strong> el conversor de divisas descarga las tasas desde una fuente pública y
+                gratuita de datos de divisas, distribuida a través de las redes de entrega de contenido (CDN) de jsDelivr
+                y Cloudflare. Solo se realiza una petición estándar de red; como en cualquier conexión a internet, el
+                proveedor puede registrar datos técnicos como la dirección IP conforme a sus propias políticas. No se
+                envía ningún dato personal.</li>
+            <li><strong>Compras dentro de la app:</strong> la compra opcional «Pro» se procesa a través de Google Play
+                Billing. Es Google, y no nosotros, quien gestiona el pago; no recibimos ni almacenamos los datos de tu
+                tarjeta ni de tu cuenta. El tratamiento de esos datos se rige por la
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de Privacidad de
+                    Google</a>.</li>
+        </ul>
 
         <h2>7. Seguridad</h2>
         <p>
